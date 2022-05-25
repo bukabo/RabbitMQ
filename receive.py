@@ -1,10 +1,11 @@
+from constant import host
 import pika
 import sys
 import os
 
 credentials = pika.PlainCredentials('test', 'test')
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters('94.198.130.58',
+    pika.ConnectionParameters(host,
                               port=5672,
                               virtual_host='/',
                               credentials=credentials))

@@ -1,8 +1,10 @@
+from constant import host
 import pika
+from time import sleep
 
 credentials = pika.PlainCredentials('test', 'test')
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters('94.198.130.58',
+    pika.ConnectionParameters(host,
                               port=5672,
                               virtual_host='/',
                               credentials=credentials))
@@ -10,13 +12,23 @@ connection = pika.BlockingConnection(
 channel = connection.channel()
 
 
-def send():
+def send(mess):
     channel.queue_declare(queue='hello')
     channel.basic_publish(exchange='my-exch',
                           routing_key='A',
-                          body='test message from den')
-    print(" [x] Sent 'Hello World!'")
+                          body=mess)
+    print(f" [x] Sent '{mess}'")
+
+def send_exch_declare(mess):
+    channel.exchange_declare(exchange='logs')
+    channel.basic_publish(exchange='logs',
+                          routing_key='B',
+                          body=mess)
+    print(f" [x] Sent '{mess}'")
 
 
-send()
-connection.close()
+if __name__ == '__main__':
+    for i in range(10):
+        sleep(1)
+        send_exch_declare(f'test message from den {i}')
+    connection.close()
