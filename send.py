@@ -32,9 +32,10 @@ def send_exch_declare(mess, rout):
 
 
 if __name__ == '__main__':
-    for i in range(6):
+    for i in range(20):
         sleep(1)
-        send_exch_declare(f'test message from den {i} A', 'A')
+        send_exch_declare(f'test message from den {i} Aa', 'A')
+        send_exch_declare(f'test message from den {i} Ac', 'C')
         send_exch_declare(f'test message from den {i} B', 'B')
         # send(f'test message from Денис {i}')x
     connection.close()
