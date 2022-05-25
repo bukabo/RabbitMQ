@@ -11,16 +11,18 @@ connection = pika.BlockingConnection(
                               credentials=credentials))
 
 channel = connection.channel()
+channel.exchange_declare(exchange='logs', exchange_type='direct')
 
+channel.queue_bind(
+    exchange='logs', queue='A', routing_key='A')
 
 def callback(ch, method, properties, body):
-    print(" [V] Received %r" % body)
+    print(" [V] Received %r" % body.decode("utf-8"))
 
 
 if __name__ == '__main__':
     try:
-        channel.basic_consume(queue='A', on_message_callback=callback, auto_ack=True)
-
+        channel.basic_consume(queue='B', on_message_callback=callback, auto_ack=True)
         print(' [*] Waiting for messages. To exit press CTRL+C')
         channel.start_consuming()
     except KeyboardInterrupt:
