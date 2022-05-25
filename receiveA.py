@@ -16,6 +16,7 @@ channel.exchange_declare(exchange='logs', exchange_type='direct')
 channel.queue_declare(queue='A', durable=True, auto_delete=True)
 # channel.queue_declare(queue='B', durable=True, auto_delete=True)
 
+# подписка на события
 channel.queue_bind(exchange='logs', queue='A', routing_key='C')
 channel.queue_bind(exchange='logs', queue='A', routing_key='A')
 # channel.queue_bind(exchange='logs', queue='B', routing_key='B')
