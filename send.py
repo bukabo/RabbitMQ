@@ -1,3 +1,5 @@
+import sys
+
 from constant import host
 import pika
 from time import sleep
