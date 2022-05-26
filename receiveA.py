@@ -1,22 +1,25 @@
-from constant import host
+from constant import host, auth
 import pika
 import sys
 import os
 
-credentials = pika.PlainCredentials('test', 'test')
+# Создаем подключение
+credentials = pika.PlainCredentials(auth['login'], auth['pass'])
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host,
                               port=5672,
                               virtual_host='/',
                               credentials=credentials))
-
 channel = connection.channel()
+
+# Обьявляем обменник (exchange)
 channel.exchange_declare(exchange='logs', exchange_type='direct')
 
+# Обьявляем очередь
 channel.queue_declare(queue='A', durable=True, auto_delete=True)
 # channel.queue_declare(queue='B', durable=True, auto_delete=True)
 
-# подписка на события
+# Создаем подписку на события (из какой очереди с каким ключем хотим получать сообщения)
 channel.queue_bind(exchange='logs', queue='A', routing_key='C')
 channel.queue_bind(exchange='logs', queue='A', routing_key='A')
 # channel.queue_bind(exchange='logs', queue='B', routing_key='B')
